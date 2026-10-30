@@ -6,7 +6,7 @@ Write a sentence and its dots change shape to match its mood. Hearts for joy, tr
 
 It's set in [Geist Serif](https://vercel.com/blog/introducing-geist-serif), which Vercel released on 30 October 2026. The font has an `ELSH` (element shape) axis that redraws every dot in the typeface: the dots on i and j, full stops, commas, colons. Mood Dots ties that axis to an emotion model running in your browser.
 
-Live: https://mood-dots.vercel.app
+Live: https://mood-dots.vercel.app (Vercel redeploys it on every push to main)
 
 ## How it works
 
