@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mood Dots — Geist Serif</title>
+<link rel="icon" href="data:,">
+<link rel="preload" href="vendor/fonts/GeistSerifVF.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="ambient" aria-hidden="true"></div>
+<header class="masthead">
+  <span class="kicker">Mood Dots</span>
+  <span class="kicker" id="status"><span class="ready-off">Reading the room…</span><span class="ready-on">Model ready · offline</span></span>
+</header>
+<main class="stage">
+  <div class="editor">
+    <div id="mirror" class="text" aria-hidden="true"></div>
+    <textarea id="input" class="text" spellcheck="false" aria-label="Write here"></textarea>
+  </div>
+</main>
+<footer class="dock">
+  <div id="ribbon" class="ribbon" aria-label="Mood timeline"></div>
+  <ul id="legend" class="legend"></ul>
+  <div class="actions"><button id="replay">Replay</button><button id="export">Export poster</button></div>
+</footer>
+<canvas id="particles" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+<div id="tip" class="tip"></div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

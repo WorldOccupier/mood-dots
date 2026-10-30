@@ -1,0 +1,70 @@
+@font-face { font-family: "Geist Serif"; src: url(../vendor/fonts/GeistSerifVF.woff2) format("woff2"); font-display: block; }
+@font-face { font-family: "GS Regular"; src: url(../vendor/fonts/GeistSerif-Regular.woff2) format("woff2"); }
+@font-face { font-family: "GS Square"; src: url(../vendor/fonts/GeistSerif-Square.woff2) format("woff2"); }
+@font-face { font-family: "GS Triangle"; src: url(../vendor/fonts/GeistSerif-Triangle.woff2) format("woff2"); }
+@font-face { font-family: "GS Heart"; src: url(../vendor/fonts/GeistSerif-Heart.woff2) format("woff2"); }
+@font-face { font-family: "Geist Mono"; src: url(../vendor/fonts/GeistMono-Regular.woff2) format("woff2"); }
+@property --ambient { syntax: "<color>"; inherits: true; initial-value: #efe8d8; }
+
+:root { --ink: #0b0a09; --ivory: #efe8d8; --muted: #efe8d870; --ambient: #efe8d8;
+  --size: clamp(46px, 7.6vw, 150px); transition: --ambient 2.8s cubic-bezier(.22,.61,.36,1); }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--ink); color: var(--ivory); overflow: hidden; }
+body { font-family: "Geist Mono", ui-monospace, monospace; }
+
+.ambient { position: fixed; inset: -20%; z-index: 0; pointer-events: none;
+  background: radial-gradient(40% 45% at 72% 28%, color-mix(in oklab, var(--ambient) 22%, transparent), transparent 70%),
+              radial-gradient(35% 40% at 18% 82%, color-mix(in oklab, var(--ambient) 10%, transparent), transparent 70%),
+              radial-gradient(120% 90% at 50% 50%, transparent 55%, #000 100%);
+  animation: drift 26s ease-in-out infinite alternate; }
+@keyframes drift { to { transform: translate3d(-4%, 3%, 0) scale(1.06); } }
+.grain { position: fixed; inset: 0; z-index: 5; pointer-events: none; opacity: .09; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+#particles { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 3; pointer-events: none; }
+
+.masthead { position: fixed; top: 0; left: 0; right: 0; z-index: 4; display: flex; justify-content: space-between;
+  padding: 28px clamp(24px, 6vw, 96px); border-bottom: 1px solid #efe8d814; }
+.kicker { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: var(--muted); }
+.ready-on, .model-ready .ready-off { display: none; } .model-ready .ready-on { display: inline; }
+
+.stage { position: relative; z-index: 2; height: 100%; padding: 120px clamp(24px, 6vw, 96px) 170px; }
+.editor { position: relative; height: 100%; }
+.text { position: absolute; inset: 0; margin: 0; padding: 0; border: 0; overflow: hidden auto;
+  font: 400 var(--size)/1.08 "Geist Serif", serif; letter-spacing: -0.01em; white-space: pre-wrap; overflow-wrap: break-word;
+  font-variation-settings: "ELSH" 0; scrollbar-width: none; }
+#input { background: transparent; color: transparent; caret-color: var(--ambient); resize: none; outline: none; }
+#input::selection { background: #efe8d826; color: transparent; }
+#mirror { pointer-events: none; color: var(--ivory); }
+.sentence { transition: color .6s; }
+.sentence .dot { font-weight: inherit; color: var(--mood); text-shadow: 0 0 .18em color-mix(in oklab, var(--mood) 55%, transparent); transition: color .9s, text-shadow .9s; }
+.sentence .ij { font-style: normal; }
+.sentence .dot { display: inline-block; }
+.sentence.swap .dot { animation: bloom 1.4s cubic-bezier(.2,.8,.2,1) both, swap .26s cubic-bezier(.3,0,.2,1) both;
+  animation-delay: var(--pulse-delay), var(--pulse-delay); }
+@keyframes swap { 0% { transform: scale(1); } 40% { transform: scale(.15); opacity: .2; } 75% { transform: scale(1.22); opacity: 1; } 100% { transform: scale(1); } }
+.sentence.pulse .dot { animation: bloom 1.4s cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--pulse-delay); }
+@keyframes bloom {
+  0% { text-shadow: 0 0 0 transparent; }
+  22% { text-shadow: 0 0 .12em var(--mood), 0 0 .5em var(--mood), 0 0 1.1em color-mix(in oklab, var(--mood) 60%, transparent); }
+  100% { text-shadow: 0 0 .18em color-mix(in oklab, var(--mood) 55%, transparent); } }
+
+.dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 4; display: grid; grid-template-columns: 1fr auto auto; gap: 32px;
+  align-items: end; padding: 22px clamp(24px, 6vw, 96px) 30px; border-top: 1px solid #efe8d814;
+  background: linear-gradient(to top, #0b0a09f0, #0b0a0900); }
+.ribbon { display: flex; gap: 6px; height: 56px; align-items: flex-end; overflow: hidden; font: 96px/0.62 "Geist Serif", serif; }
+.bead { color: var(--mood); text-shadow: 0 0 14px var(--mood); animation: rise .9s cubic-bezier(.2,.9,.2,1.2) both;
+  transition: color .8s; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px) scale(.4); } }
+.legend { display: flex; gap: 22px; margin: 0; padding: 0; list-style: none; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.legend li { display: flex; align-items: baseline; gap: 2px; }
+.legend .glyph { font: 34px/0 "Geist Serif", serif; color: var(--ivory); }
+.actions { display: flex; gap: 10px; }
+button { font: 11px "Geist Mono", monospace; letter-spacing: .2em; text-transform: uppercase; color: var(--ivory); cursor: pointer;
+  background: transparent; border: 1px solid #efe8d833; border-radius: 999px; padding: 11px 18px; transition: border-color .3s, box-shadow .3s; }
+button:hover { border-color: var(--ambient); box-shadow: 0 0 24px -6px var(--ambient); }
+.tip { position: fixed; left: 0; top: 0; z-index: 6; pointer-events: none; opacity: 0; transition: opacity .2s;
+  font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; padding: 7px 10px; border: 1px solid color-mix(in oklab, var(--mood) 50%, transparent);
+  border-radius: 999px; background: #0b0a09d0; color: var(--mood); }
+.tip.on { opacity: 1; }
+@media (max-width: 760px) { #status { display: none; } }
+@media (max-width: 760px) { .dock { grid-template-columns: 1fr; gap: 14px; } .legend { flex-wrap: wrap; gap: 12px; } }

@@ -1,0 +1,19 @@
+{
+  "name": "mood-dots",
+  "version": "1.0.0",
+  "description": "Geist Serif dots that change shape with the mood of each sentence",
+  "main": "index.js",
+  "scripts": {
+    "verify": "node verify.mjs",
+    "record": "node record.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {},
+  "private": true,
+  "devDependencies": {
+    "puppeteer-core": "24.43.1"
+  }
+}
