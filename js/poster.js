@@ -2,6 +2,7 @@ import { moodOf } from './moods.js';
 import { isDotChar } from './sentences.js';
 
 const W = 1080, H = 1350, MARGIN = 96;
+const BODY_TOP = MARGIN + 220, BODY_BOTTOM = H - MARGIN - 90;
 // Canvas can't set variation axes, so the poster uses the four static cuts of Geist Serif.
 const FAMILY_BY_SHAPE = { round: 'GS Regular', square: 'GS Square', triangle: 'GS Triangle', heart: 'GS Heart' };
 
@@ -50,7 +51,12 @@ export class PosterExporter {
 
   paintBody(ctx, states) {
     const size = this.fitSize(ctx, states);
-    let x = MARGIN, y = MARGIN + 260 + size;
+    this.layoutBody(ctx, states, size, true);
+  }
+
+  // Returns the baseline of the last line; draws only when paint is true.
+  layoutBody(ctx, states, size, paint) {
+    let x = MARGIN, y = BODY_TOP + size;
     for (const state of states) {
       const mood = moodOf(state.label);
       ctx.font = `${size}px "${FAMILY_BY_SHAPE[mood.shape]}"`;
@@ -58,9 +64,10 @@ export class PosterExporter {
         const width = ctx.measureText(word).width;
         if (x + width > W - MARGIN && word.trim()) { x = MARGIN; y += size * 1.12; }
         if (!word.trim() && x === MARGIN) continue;
-        x = this.paintWord(ctx, word, x, y, mood.hue);
+        x = paint ? this.paintWord(ctx, word, x, y, mood.hue) : x + width;
       }
     }
+    return y;
   }
 
   paintWord(ctx, word, x, y, hue) {
@@ -72,16 +79,18 @@ export class PosterExporter {
     ctx.shadowBlur = 0; return x;
   }
 
+  // Largest size (150px down to 14px) whose wrapped text ends above the ribbon rule.
   fitSize(ctx, states) {
-    const chars = states.reduce((n, s) => n + s.raw.length, 0) || 1;
-    const area = (W - MARGIN * 2) * (H - MARGIN * 2 - 420);
-    return Math.max(40, Math.min(150, Math.sqrt(area / chars) * 1.25));
+    for (let size = 150; size > 14; size -= 4) {
+      if (this.layoutBody(ctx, states, size, false) + size * 0.3 < BODY_BOTTOM) return size;
+    }
+    return 14;
   }
 
   paintRibbon(ctx, states) {
     const y = H - MARGIN; ctx.font = '72px "GS Regular"';
     ctx.fillStyle = '#efe8d833'; ctx.fillRect(MARGIN, y - 60, W - MARGIN * 2, 1);
-    states.filter((s) => s.label !== 'pending').forEach((s, i) => {
+    states.filter((s) => s.label !== 'pending').slice(-18).forEach((s, i) => {
       const mood = moodOf(s.label);
       ctx.font = `72px "${FAMILY_BY_SHAPE[mood.shape]}"`; ctx.fillStyle = mood.hue;
       ctx.shadowColor = mood.hue; ctx.shadowBlur = 18; ctx.fillText('.', MARGIN + i * 34, y);

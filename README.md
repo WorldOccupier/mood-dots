@@ -15,6 +15,16 @@ Live: https://mood-dots.vercel.app (Vercel redeploys it on every push to main)
 3. The sentence's dots shrink, switch to the new shape and pop back with a glow and a few sparks in the mood's colour. The axis value snaps rather than animates, because the values in between are other shapes.
 4. The background drifts toward the colour of the latest mood, and a row of shaped dots along the bottom records every sentence.
 
+## Sound
+
+Every sound is synthesised live with the Web Audio API. There are no audio files.
+
+- Each key gives a soft mechanical tick with a slightly random pitch. Space is a lower, quieter thock, and backspace is a short downward zip.
+- Buttons give a two-part latch click.
+- When a sentence's dots land, the sound depends on the shape. Hearts get a bright four-note chime, triangles a punchy pluck with a low thunk, squares a clean two-note blip, and round dots a warm low bell with a bubbly pop.
+
+A light reverb and a compressor sit on the output so stacked sounds never clip. Audio starts on your first click or keypress, as browsers require. The Sound toggle in the top bar remembers your choice.
+
 **Replay** retypes your text at a human pace so you can screen-record it. **Export poster** saves a 1080×1350 PNG.
 
 ## Mood to shape
@@ -43,7 +53,7 @@ Open http://localhost:8765. On localhost the app loads the model from `./models`
 
 Other URL options: `?text=...` preloads text, `?speed=1.5` speeds up Replay.
 
-`node verify.mjs` runs a headless Chrome check: it confirms the three sample sentences get the right moods and that each sentence only ever renders its old and new shape. Run `npm install` first, and keep the local server running.
+`node verify.mjs` runs a headless Chrome check. It confirms the sample sentences get the right moods and that each sentence only ever renders its old and new shape. It also checks editing, pasting, hover labels, long text and the sound voices, and that the timeline stays inside the window at five screen sizes. `node record.mjs` records a Replay to `shots/replay-sound.mp4`. Headless Chrome has no audio output, so it logs each sound, renders the same synth offline and muxes the result in. Run `npm install` first, and keep the local server running.
 
 ## Credits
 

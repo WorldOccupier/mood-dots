@@ -4,3 +4,4 @@ shots/
 .vercel/
 *.log
 vendor/transformers.js
+.tmp/

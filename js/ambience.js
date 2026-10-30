@@ -1,5 +1,7 @@
 import { moodOf, elshOf } from './moods.js';
 
+const BEAD_PITCH_PX = 40; // matches .bead width + gap in style.css
+
 // Drifts the ambient background toward the latest mood and draws the mood ribbon.
 export class Ambience {
   constructor({ root, ribbon }) { this.root = root; this.ribbon = ribbon; }
@@ -11,7 +13,10 @@ export class Ambience {
     this.renderRibbon(classified);
   }
 
-  renderRibbon(classified) {
+  // Shows only as many beads as fit; the oldest fall off the left.
+  renderRibbon(allClassified) {
+    const capacity = Math.max(1, Math.floor(this.ribbon.clientWidth / BEAD_PITCH_PX));
+    const classified = allClassified.slice(-capacity);
     const existing = this.ribbon.children;
     classified.forEach((state, i) => {
       const mood = moodOf(state.label);

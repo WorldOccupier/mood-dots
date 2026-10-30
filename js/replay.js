@@ -1,6 +1,8 @@
 // Retypes the current text at a human pace: quick letters, pauses after words and sentences.
 export class Replayer {
-  constructor(editor, { speed = 1 } = {}) { this.editor = editor; this.speed = speed; this.token = 0; }
+  constructor(editor, { speed = 1, onType } = {}) { Object.assign(this, { editor, speed, onType }); this.token = 0; }
+
+  stop() { this.token++; }
 
   delayFor(ch) {
     const jitter = 0.6 + Math.random() * 0.8;
@@ -16,7 +18,9 @@ export class Replayer {
     for (const ch of text) {
       if (token !== this.token) return;
       this.editor.textarea.value += ch;
+      this.onType?.(ch);
       this.editor.refresh();
+      this.editor.scrollToEnd();
       await new Promise((r) => setTimeout(r, this.delayFor(ch) / this.speed));
     }
   }
